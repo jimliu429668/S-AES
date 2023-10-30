@@ -28,7 +28,8 @@ simple AES by Python
 
 ## 核心代码
 # S-Box、逆S-Box和替换矩阵
-'''Python
+
+```
 s_box = [
     [9, 4, 10, 11],
     [13, 1, 8, 5],
@@ -62,3 +63,4 @@ replacement_matrix = [
     [1, 1, 1, 1]
 ]
 
+```

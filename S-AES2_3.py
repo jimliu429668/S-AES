@@ -600,7 +600,7 @@ def generate_random_IV():
 def xor(bit_seq1, bit_seq2):
     return [b1 ^ b2 for b1, b2 in zip(bit_seq1, bit_seq2)]
 
-
+#CBC加密
 def CBC_encrypt(plaintext, key):
     # 分割32位明文为两个16位块
     p1 = plaintext[:16]
@@ -618,7 +618,7 @@ def CBC_encrypt(plaintext, key):
     return IV, p1+p2
 
 
-
+#CBC解密
 def CBC_decrypt(ciphertext, key, IV):
     # 分割32位明文为两个16位块
     c1 = ciphertext[:16]
@@ -633,18 +633,21 @@ def CBC_decrypt(ciphertext, key, IV):
     c2 = xor(c2, previous)
     return c1+c2
 
+#篡改密文后使用CBC解密
 def test_aes_cbc():
     plain = [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0]
     key = [0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1]
-    print("明文：",plain)
+    print("原明文：",plain)
     print("密钥：", key)
     iv, cbc_en = CBC_encrypt(plain, key)
-    print("iv = ", iv, "cbc加密后：", cbc_en)
+    print("iv = ", iv)
+    print("cbc加密后密文：", cbc_en)
     cbc_de = CBC_decrypt(cbc_en,key,iv)
 
     cbc_en[0:4] = [0,1,1,1]
-    print("替换篡改加密后的密文", cbc_en)
+    print("替换篡改后的密文:", cbc_en)
     cbc_de1 = CBC_decrypt(cbc_en,key,iv)
+    print("替换篡改后密文解密的明文:", cbc_de1)
     if(cbc_de1 == plain):
         print("篡改后相等")
     else:

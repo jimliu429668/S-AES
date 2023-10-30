@@ -599,21 +599,32 @@ def CBC_decrypt(ciphertext, key, IV):
     return c1 + c2
 
 # 篡改密文后使用CBC解密
-def test_aes_cbc():
-    plain = [1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0]
-    key = [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1]
-    print("原明文：", plain)
-    print("密钥：", key)
+plain = [1,0,1,0,0,1,0,0,1,1,0,0,1,1,1,0,1,0,0,0,1,0,1,0,1,1,0,1,1,1,0,0]
+    key = [1,0,1,0,0,1,0,1,1,1,0,0,1,0,1,1]
+    plain_ = int(''.join(map(str, plain)))
+    key_ = int(''.join(map(str, key)))
+    print("原明文：",plain_)
+    print("密钥：", key_)
     iv, cbc_en = CBC_encrypt(plain, key)
-    print("iv = ", iv)
-    print("cbc加密后密文：", cbc_en)
-    cbc_de = CBC_decrypt(cbc_en, key, iv)
+    iv_ = int(''.join(map(str, iv)))
+    cbc_en_ = int(''.join(map(str, cbc_en)))
+    print("iv = ", iv_)
+    print("cbc加密后密文：", cbc_en_)
+    cbc_de = CBC_decrypt(cbc_en,key,iv)
+    cbc_de_ = int(''.join(map(str, cbc_de)))
+    print("cbc密文篡改前解密生成的明文：", cbc_de_)
+    if(cbc_de == plain):
+        print("篡改前相等")
+    else:
+        print("篡改前不相等")
 
-    cbc_en[0:4] = [0, 1, 1, 1]
-    print("替换篡改后的密文:", cbc_en)
-    cbc_de1 = CBC_decrypt(cbc_en, key, iv)
-    print("替换篡改后密文解密的明文:", cbc_de1)
-    if (cbc_de1 == plain):
+    cbc_en[0:4] = [0,1,1,1]
+    cbc_en_ = int(''.join(map(str, cbc_en)))
+    print("替换篡改后的密文:", cbc_en_)
+    cbc_de1 = CBC_decrypt(cbc_en,key,iv)
+    cbc_de1_ = int(''.join(map(str, cbc_de1)))
+    print("替换篡改后密文解密生成的明文:", cbc_de1_)
+    if(cbc_de1 == plain):
         print("篡改后相等")
     else:
         print("篡改后不相等")

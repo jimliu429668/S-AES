@@ -599,7 +599,8 @@ def CBC_decrypt(ciphertext, key, IV):
     return c1 + c2
 
 # 篡改密文后使用CBC解密
-plain = [1,0,1,0,0,1,0,0,1,1,0,0,1,1,1,0,1,0,0,0,1,0,1,0,1,1,0,1,1,1,0,0]
+def test_aes_cbc():
+    plain = [1,0,1,0,0,1,0,0,1,1,0,0,1,1,1,0,1,0,0,0,1,0,1,0,1,1,0,1,1,1,0,0]
     key = [1,0,1,0,0,1,0,1,1,1,0,0,1,0,1,1]
     plain_ = int(''.join(map(str, plain)))
     key_ = int(''.join(map(str, key)))

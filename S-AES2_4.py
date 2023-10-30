@@ -524,7 +524,7 @@ def double_break():
 
 # 三重加密实现
 def triplemain():
-    plaintext = input("请输入16位密文（以0和1表示）: ")
+    plaintext = input("请输入16位明文（以0和1表示）: ")
     key_1 = input("请输入第一个16位密钥（以0和1表示）: ")
     key_2 = input("请输入第二个16位密钥（以0和1表示）: ")
     key_3 = input("请输入第三个16位密钥（以0和1表示）: ")

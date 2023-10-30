@@ -28,14 +28,19 @@ simple AES by Python
 #### 中间相遇攻击
 假设找到了使用相同密钥的明、密文对(一个或多个)，请尝试使用中间相遇攻击的方法找到正确的密钥Key(K1+K2)。
 ![image](https://github.com/jimliu429668/S-AES/assets/129664900/3ec8f9e1-64c5-4fe9-87aa-4521ffb1e517)   
-
+如图即为可能的密钥，无法完全显示，截取部分内容。   
 
 #### 三重加密
-选择使用48bits(K1+K2+K3)的模式进行三重加解密。  
+本组选择使用48bits(K1+K2+K3)的模式进行三重加解密。  
+![image](https://github.com/jimliu429668/S-AES/assets/129664900/e66e1fc4-13c2-45a3-ad1d-6b59d4356749)   
+输入明文为：1001001011010101   
+48bits(K1+K2+K3)密钥为：111100001010010111100111101001010101101011110101   
+经过三重加密生成的密文为：0100101011010100   
 
 ### 第5关：工作模式
 基于S-AES算法，使用密码分组链(CBC)模式对较长的明文消息进行加密。注意初始向量(16 bits) 的生成，并需要加解密双方共享。
 在CBC模式下进行加密，并尝试对密文分组进行替换或修改，然后进行解密，请对比篡改密文前后的解密结果。
+
 
 ## 核心代码
 ### S-Box、逆S-Box和替换矩阵
@@ -217,14 +222,14 @@ def inverse_mix_columns(mingwen):
         mingwen[1][i] = n01[i]
         mingwen[1][i + 4] = n11[i]
 ```
-###
+### 
 ```
 def round_key_addition(mingwen, key):
     for i in range(2):
         for j in range(8):
             mingwen[i][j] ^= key[i][j]
 ```
-###
+### 
 ```
 def output(a):
     for i in range(2):
@@ -232,7 +237,7 @@ def output(a):
             print(a[i][j], end=' ')
     print()
 ```
-###
+### s-aes加解密函数
 ```
 def aes_encrypt(plaintext,key):
 
@@ -263,7 +268,7 @@ def aes_encrypt(plaintext,key):
 
     return mingwen
 ```
-### 双重加密
+### 双重加密函数
 ```
 def aes_double_encrypt(plaintext,key_a,key_b):
 
@@ -316,7 +321,7 @@ def aes_double_encrypt(plaintext,key_a,key_b):
     round_key_addition(mingwen, key_double2)
     return mingwen
 ```
-### 三重加密
+### 三重加密函数
 ```
 def aes_triple_encrypt(plaintext,key_a,key_b,key_c):
 
@@ -393,7 +398,7 @@ def aes_triple_encrypt(plaintext,key_a,key_b,key_c):
 
     return mingwen
 ```
-###
+### s-aes加解密函数
 ```
 def aes_decrypt(ciphertext,key):
     miwen = [[int(ciphertext[i]) for i in range(8)], [int(ciphertext[i]) for i in range(8, 16)]]
@@ -433,7 +438,7 @@ def aes_decrypt(ciphertext,key):
 
     return miwen
 ```
-###
+### 生成随机密钥
 ```
 def generate_random_key():
     random_numbers = [random.randint(0, 1) for _ in range(16)]
@@ -441,7 +446,7 @@ def generate_random_key():
     pyperclip.copy(random_key)  # 将生成的随机数复制到剪贴板
     return random_key
 ```
-###
+### ascii加解密
 ```
 def ascii_to_binary(ascii_text):
     # 将ASCII编码的文本转换为二进制字符串
@@ -579,10 +584,10 @@ def double_break():
             if table1[x]==table2[y]:
                 print(x,y,"密钥对：",format(x, '016b'),format(y, '016b'))
 ```
-### 
+### 三重加密过程
 ```
 def triplemain():
-    plaintext = input("请输入16位密文（以0和1表示）: ")
+    plaintext = input("请输入16位明文（以0和1表示）: ")
     key_1 = input("请输入第一个16位密钥（以0和1表示）: ")
     key_2 = input("请输入第二个16位密钥（以0和1表示）: ")
     key_3 = input("请输入第三个16位密钥（以0和1表示）: ")

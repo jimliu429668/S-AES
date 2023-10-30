@@ -4,7 +4,7 @@ simple AES by Python
 ## 过关测试
 ### 第1关：基本测试
 *根据S-AES算法编写和调试程序，提供GUI解密支持用户交互。输入可以是16bit的数据和16bit的密钥，输出是16bit的密文。*
-![image](https://github.com/jimliu429668/S-AES/assets/129664900/9dc4b0b9-602d-4f87-b940-fb04d8cada38)  
+![image](https://github.com/jimliu429668/S-AES/assets/129664900/dbcb789e-7219-4e67-9115-9069b8ef78f9)  
 输入的明文是：1000010110100101  
 随机生成的密钥是：0110100111000100  
 生成的密文是：0011000100010101   
@@ -16,7 +16,7 @@ simple AES by Python
 其他组结果是：1100010010111010  
 ![image](https://github.com/jimliu429668/S-AES/assets/129664900/a84389b9-8e04-499f-ae12-23f3846f99d8)   
 本组结果是：1100010010111010   
-![image](https://github.com/jimliu429668/S-AES/assets/129664900/b7e1fe47-a426-4199-884f-6183ba536563)  
+![image](https://github.com/jimliu429668/S-AES/assets/129664900/3e84cd42-752e-49df-aa6c-b05c43dd5873)   
 两组结果相同，交叉测试成功。   
 ### 第3关：扩展功能
 *考虑到向实用性扩展，加密算法的数据输入可以是ASII编码字符串(分组为2 Bytes)，对应地输出也可以是ACII字符串(很可能是乱码)。*   
@@ -24,6 +24,10 @@ simple AES by Python
 ### 第4关：多重加密
 #### 双重加密
 *将S-AES算法通过双重加密进行扩展，分组长度仍然是16 bits，但密钥长度为32 bits。*   
+![image](https://github.com/jimliu429668/S-AES/assets/129664900/79af7bff-05ed-4555-b183-c4d1f3ccdd74)   
+输入明文为：1011011100111100   
+输入32bits密钥为：10100101101001011111010100011101   
+经过双重加密得到密文：0110000111101110    
 
 #### 中间相遇攻击
 *假设找到了使用相同密钥的明、密文对(一个或多个)，请尝试使用中间相遇攻击的方法找到正确的密钥Key(K1+K2)。*   
@@ -84,7 +88,7 @@ replacement_matrix = [
 rcon1 = [1, 0, 0, 0, 0, 0, 0, 0]
 rcon2 = [0, 0, 1, 1, 0, 0, 0, 0]
 ```
-### 
+### 对输入的多项式a进行乘x操作，并将结果存储在xfx中
 ```
 def multiply_x(xfx, a):
     # 注意要取模，既约多项式是x^4 + x + 1
@@ -99,7 +103,7 @@ def multiply_x(xfx, a):
         xfx[2] = a[3] ^ 1
         xfx[3] = 1
 ```
-### 
+### 在GF(2^4)域上，使用既约多项式x^4 + x + 1，对两个多项式a和b进行乘法操作
 ```
 def polynomial_multiply(a, b):
     result = [0, 0, 0, 0]
@@ -138,7 +142,7 @@ def XOR4(a, b):
         t[i] = a[i] ^ b[i]
     return t
 ```
-### 
+### s盒替换和逆s盒替换
 ```
 def sbox_substitution(temp):
     t1 = 2 * temp[0] + temp[1]
@@ -167,7 +171,7 @@ def inverse_sbox_substitution(temp):
     for i in range(4):
         temp[i + 4] = replacement_matrix[tihuan2][i]
 ```
-### 
+### 行移位（同逆行移位）
 ```
 def left_shift(temp):
     #第一字节的右半部分和第二字节的右半部分进行替换
@@ -188,7 +192,7 @@ def g_function(temp, rcon):
     sbox_substitution(t)
     return XOR8(t, rcon)
 ```
-### 
+### 列混淆和逆列混淆
 ```
 def mix_columns(mingwen):
     si_de2jinzhi = [0, 1, 0, 0]
@@ -223,7 +227,7 @@ def inverse_mix_columns(mingwen):
         mingwen[1][i] = n01[i]
         mingwen[1][i + 4] = n11[i]
 ```
-### 
+### 轮密钥加
 ```
 def round_key_addition(mingwen, key):
     for i in range(2):
@@ -238,7 +242,7 @@ def output(a):
             print(a[i][j], end=' ')
     print()
 ```
-### s-aes加解密函数
+### 二进制加密函数
 ```
 def aes_encrypt(plaintext,key):
 
@@ -399,7 +403,7 @@ def aes_triple_encrypt(plaintext,key_a,key_b,key_c):
 
     return mingwen
 ```
-### s-aes加解密函数
+### 二进制解密函数
 ```
 def aes_decrypt(ciphertext,key):
     miwen = [[int(ciphertext[i]) for i in range(8)], [int(ciphertext[i]) for i in range(8, 16)]]
@@ -547,7 +551,7 @@ def ascii_decrypt(ciphertext, key):
 
     print("解密后的明文：", decrypted_text)
 ```
-###
+### 二进制加密实现
 ```
 def main_binary():
     # mingwen = [[0, 1, 1, 0, 1, 1, 1, 1], [0, 1, 1, 0, 1, 0, 1, 1]]  0110111101101011
@@ -598,7 +602,7 @@ def triplemain():
     ciphertext = aes_triple_encrypt(plaintext,key_1,key_2,key_3)
     print("三重加密结果为：",''.join(map(str, ciphertext[0])) + ''.join(map(str, ciphertext[1])))
 ```
-### 
+### ascii加解密实现
 ```
 def main_ascii():
     plaintext = input("请输入ASCII编码的明文: ")
@@ -622,7 +626,7 @@ def main_ascii():
     # 解密ASCII字符串
     ascii_decrypt(ciphertext, key)
 ```
-### CBC
+### CBC加解密实现
 ```
 def generate_random_IV():
     # 使用Python的随机库生成16位IV
@@ -681,7 +685,7 @@ def test_aes_cbc():
     else:
         print("篡改后不相等")
 ```
-###
+### Tkinter GUI界面部分
 ```
 def GUI_binary():
     def encrypt_text():

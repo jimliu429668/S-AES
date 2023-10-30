@@ -20,6 +20,11 @@ simple AES by Python
 两组结果相同，交叉测试成功。   
 ### 第3关：扩展功能
 *考虑到向实用性扩展，加密算法的数据输入可以是ASII编码字符串(分组为2 Bytes)，对应地输出也可以是ACII字符串(很可能是乱码)。*   
+![image](https://github.com/jimliu429668/S-AES/assets/129664900/570bd205-c71d-4256-afec-fad91de686c8)  
+输入明文“hello”
+密钥为：1001010011000011
+加密后的密文为：100101010111110000001110001000101111111001000111    
+（对明文部分不足16bits的填0处理，再进行后续加密）   
 
 ### 第4关：多重加密
 #### 双重加密
@@ -44,7 +49,7 @@ simple AES by Python
 ### 第5关：工作模式
 *基于S-AES算法，使用密码分组链(CBC)模式对较长的明文消息进行加密。注意初始向量(16 bits) 的生成，并需要加解密双方共享。
 在CBC模式下进行加密，并尝试对密文分组进行替换或修改，然后进行解密，请对比篡改密文前后的解密结果。*  
-![image](https://github.com/jimliu429668/S-AES/assets/129664900/754fafe5-5cf4-48df-9ba6-57039c59545b)
+![image](https://github.com/jimliu429668/S-AES/assets/129664900/754fafe5-5cf4-48df-9ba6-57039c59545b)   
 如图在CBC模式下进行加密，对密文分组进行修改，然后进行解密，解密结果不是原明文。
 
 ## 核心代码
@@ -573,6 +578,18 @@ def main_binary():
         return
     aes_decrypt(ciphertext,key_2)
 ```
+### 双重加密实现  
+```
+def doublemain():
+    plaintext = input("请输入16位明文（以0和1表示）: ")
+    key_1 = input("请输入第一个16位密钥（以0和1表示）: ")
+    key_2 = input("请输入第二个16位密钥（以0和1表示）: ")
+    if len(plaintext) != 16 or len(key_1) != 16 or len(key_2) != 16:
+        print("输入长度不正确，请输入16位的密文和密钥。")
+        return
+    ciphertext = aes_double_encrypt(plaintext, key_1, key_2)
+    print("双重加密结果为：", ''.join(map(str, ciphertext[0])) + ''.join(map(str, ciphertext[1])))
+```
 ### 双重加密的有效破解方法
 ```
 def double_break():
@@ -667,19 +684,31 @@ def CBC_decrypt(ciphertext, key, IV):
     return c1+c2
 
 def test_aes_cbc():
-    plain = [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0]
-    key = [0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1]
-    print("原明文：",plain)
-    print("密钥：", key)
+    plain = [1,0,1,0,0,1,0,0,1,1,0,0,1,1,1,0,1,0,0,0,1,0,1,0,1,1,0,1,1,1,0,0]
+    key = [1,0,1,0,0,1,0,1,1,1,0,0,1,0,1,1]
+    plain_ = int(''.join(map(str, plain)))
+    key_ = int(''.join(map(str, key)))
+    print("原明文：",plain_)
+    print("密钥：", key_)
     iv, cbc_en = CBC_encrypt(plain, key)
-    print("iv = ", iv)
-    print("cbc加密后密文：", cbc_en)
+    iv_ = int(''.join(map(str, iv)))
+    cbc_en_ = int(''.join(map(str, cbc_en)))
+    print("iv = ", iv_)
+    print("cbc加密后密文：", cbc_en_)
     cbc_de = CBC_decrypt(cbc_en,key,iv)
+    cbc_de_ = int(''.join(map(str, cbc_de)))
+    print("cbc密文篡改前解密生成的明文：", cbc_de_)
+    if(cbc_de == plain):
+        print("篡改前相等")
+    else:
+        print("篡改前不相等")
 
     cbc_en[0:4] = [0,1,1,1]
-    print("替换篡改后的密文:", cbc_en)
+    cbc_en_ = int(''.join(map(str, cbc_en)))
+    print("替换篡改后的密文:", cbc_en_)
     cbc_de1 = CBC_decrypt(cbc_en,key,iv)
-    print("替换篡改后密文解密的明文:", cbc_de1)
+    cbc_de1_ = int(''.join(map(str, cbc_de1)))
+    print("替换篡改后密文解密生成的明文:", cbc_de1_)
     if(cbc_de1 == plain):
         print("篡改后相等")
     else:

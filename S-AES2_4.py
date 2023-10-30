@@ -498,7 +498,7 @@ def main_binary():
 
 # 双重加密实现
 def doublemain():
-    plaintext = input("请输入16位密文（以0和1表示）: ")
+    plaintext = input("请输入16位明文（以0和1表示）: ")
     key_1 = input("请输入第一个16位密钥（以0和1表示）: ")
     key_2 = input("请输入第二个16位密钥（以0和1表示）: ")
     if len(plaintext) != 16 or len(key_1) != 16 or len(key_2) != 16:

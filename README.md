@@ -27,6 +27,8 @@ simple AES by Python
 
 #### 中间相遇攻击
 假设找到了使用相同密钥的明、密文对(一个或多个)，请尝试使用中间相遇攻击的方法找到正确的密钥Key(K1+K2)。
+![image](https://github.com/jimliu429668/S-AES/assets/129664900/3ec8f9e1-64c5-4fe9-87aa-4521ffb1e517)   
+
 
 #### 三重加密
 选择使用48bits(K1+K2+K3)的模式进行三重加解密。  

@@ -642,11 +642,6 @@ def test_aes_cbc():
     print("iv = ", iv, "cbc加密后：", cbc_en)
     cbc_de = CBC_decrypt(cbc_en,key,iv)
 
-    if(cbc_de == plain):
-        print("ture")
-    else:
-        print("false")
-
     cbc_en[0:4] = [0,1,1,1]
     print("替换篡改加密后的密文", cbc_en)
     cbc_de1 = CBC_decrypt(cbc_en,key,iv)

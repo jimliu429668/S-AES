@@ -4,7 +4,7 @@ simple AES by Python
 ## 过关测试
 ### 第1关：基本测试
 *根据S-AES算法编写和调试程序，提供GUI解密支持用户交互。输入可以是16bit的数据和16bit的密钥，输出是16bit的密文。*
-![image](https://github.com/jimliu429668/S-AES/assets/129664900/9dc4b0b9-602d-4f87-b940-fb04d8cada38)
+![image](https://github.com/jimliu429668/S-AES/assets/129664900/9dc4b0b9-602d-4f87-b940-fb04d8cada38)  
 输入的明文是：1000010110100101
 随机生成的密钥是：0110100111000100
 生成的密文是：0011000100010101
